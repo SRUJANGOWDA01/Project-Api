@@ -91,6 +91,7 @@ const login = async (req,res) => {
 const logout = async (req,res) => {
     try {
         res.clearCookie("authToken", { path: `/`})
+
         res.status(StatusCodes.OK).json({msg: "logout successfully"})
     } catch (err) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ status: false, msg: err.message })
@@ -100,7 +101,21 @@ const logout = async (req,res) => {
 // verify user
 const verifyUser = async (req,res) => {
     try {
-        res.json({msg: "verify user"})
+        // reading the incoming user id through middleware
+        const id = req.userId
+
+        //read the user data from db collection
+        let extUser = await UserModel.findById(id).select('-password')
+
+        // if user id not exists.
+           if(!extUser)
+           return res.status(StatusCodes.NOT_FOUND).json({ status: false, msg: `requested user id not exists`})
+
+           //final response
+        res.status(StatusCodes.OK).json({ status: true, msg: "user verified successfully", user: extUser})   
+
+        // res.json({ id })
+        // res.json({msg: "verify user"})
     } catch (err) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ status: false, msg: err.message })
     }
