@@ -11,6 +11,8 @@ import "bootstrap/dist/js/bootstrap.bundle"
 import "react-toastify/dist/ReactToastify.css"
 
 import "bootstrap-icons/font/bootstrap-icons.css"
+
+// context provider component
 import AuthProvider from './Context/AuthContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
